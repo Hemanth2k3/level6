@@ -68,7 +68,7 @@ describe("Todo Application", function () {
     const parsedUpdateResponse = JSON.parse(markCompleteResponse.text);
     expect(parsedUpdateResponse.completed).toBe(false);
   });
-  test(" Test suite to mark todo as incomplete ", async () => {
+  test(" Test suite to mark todo as incomplete (Updating Todo) ", async () => {
     let res = await agent.get("/");
     let csrfToken = extractCsrfToken(res);
     await agent.post("/todos").send({
