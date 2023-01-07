@@ -11,43 +11,50 @@
   </head>
   <script>
     //updating and deleting todo
-    let csrfToken = document
-      .querySelector('meta[name="csrf-token"]')
-      .getAttribute("content");
+   /* eslint-disable no-unused-vars */
+var token = document
+  .querySelector("meta[name='csrf-token']")
+  .getAttribute("content");
 
-    // eslint-disable-next-line no-unused-vars
-    const updateTodo = (id) => {
-      fetch(`/todos/${id}`, {
-        method: "put",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          _csrf: csrfToken,
-        }),
-      })
-        .then((res) => {
-          if (res.ok) {
-            window.location.reload();
-          }
-        })
-        .catch((err) => console.error(err));
-    };
+// Function to check or uncheck a todo item
+function updateTodo(id) {
+  const boolVal = document.getElementById("todos-checkbox-" + id).checked;
+  fetch(`/todos/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      _csrf: token,
+      completed: boolVal,
+    }),
+  })
+    .then((res) => {
+      if (res.ok) {
+        window.location.reload();
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
 
-    // eslint-disable-next-line no-unused-vars
-    const deleteTodo = (id) => {
-      fetch(`/todos/${id}`, {
-        method: "delete",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          _csrf: csrfToken,
-        }),
-      })
-        .then((res) => {
-          if (res.ok) {
-            window.location.reload();
-          }
-        })
-        .catch((err) => console.error(err));
-    };
+// Function to delete a todo item
+function deleteTodo(id) {
+  fetch(`/todos/${id}`, {
+    method: "delete",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      _csrf: token,
+    }),
+  })
+    .then((res) => {
+      if (res.ok) {
+        window.location.reload();
+      }
+    })
+    .catch((err) => console.log(err));
+}
 
   </script>
   <body>
@@ -90,10 +97,10 @@
         <br />
 
         <!--contents of todo.ejs get-->
-        <%- include("todos.ejs", {title: "Overdue",data: overdueItems}) %>         
-        <%- include("todos.ejs", {title: "Due Today",data: dueTodayItems}) %>          
-        <%- include("todos.ejs", {title: "Due Later",data: dueLaterItems}) %>        
-        <%- include("todos.ejs", {title: "Completed Items",data: completedItems}) %>
+        <%- include('todos.ejs', {title: "Overdue", data: overDue}) %>
+        <%- include('todos.ejs', {title: "Due Today", data: dueToday}) %>
+        <%- include('todos.ejs', {title: "Due Later", data: dueLater}) %>
+        <%- include('todos.ejs', {title: "Completed Items", data: completedItems}) %>       
     
     
   </body>
